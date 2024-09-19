@@ -1,8 +1,5 @@
 {
-  "image": "mcr.microsoft.com/windows",
+  "image": "metthal/windows",
   "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {
-      "version": "latest"
-    }
   }
 }
