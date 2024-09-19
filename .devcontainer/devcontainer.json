@@ -1,5 +1,8 @@
 {
   "image": "mcr.microsoft.com/windows:ltsc2019",
   "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "version": "latest"
+    }
   }
 }
