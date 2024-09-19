@@ -1,5 +1,5 @@
 {
-  "image": "metthal/windows",
+  "image": "metthal/windows:ltsc2019-vs2019-cmake3.16.2-python3.6.8",
   "features": {
   }
 }
