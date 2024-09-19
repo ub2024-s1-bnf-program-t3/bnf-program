@@ -1,5 +1,5 @@
 {
-  "image": "dockurr/windows",
+  "image": "mcr.microsoft.com/windows:ltsc2019-amd64",
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "version": "latest"
