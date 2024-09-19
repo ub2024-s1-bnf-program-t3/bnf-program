@@ -1,5 +1,5 @@
 {
-  "image": "esolang/lua:2.4.0",
+  "image": "consol/debian-xfce-vnc",
   "features": {
   }
 }
