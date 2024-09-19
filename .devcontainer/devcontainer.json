@@ -1,5 +1,5 @@
 {
-  "image": "kaixhin/vnc",
+  "image": "zerodivide1/docker-novnc",
   "features": {
      "ghcr.io/devcontainers/features/common-utils:2": {
       "version": "latest"
