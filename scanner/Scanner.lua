@@ -76,7 +76,7 @@ function Scanner:scan(input)
                 local func = nextCharCheck[nextChar]
                 if func then
                     local retVal = func(i)
-                    print("Token: " .. retVal:getValue())
+                    -- print("Token: " .. retVal:getValue())
                     -- Append to the scanner output
                     table.insert(output, retVal)
                     -- return retVal -- Bubble upwards
@@ -117,7 +117,7 @@ function Scanner:scan(input)
                 end
                 local func_val = func()
                 if func_val ~= -1 then
-                    print("Next character is S, or T")
+                    -- print("Next character is S, or T")
                     -- Append to the scanner output
                     table.insert(output, func_val)
                     -- return func_val -- Bubble upwards   
@@ -166,12 +166,7 @@ function Scanner:scan(input)
                 break
             end
         else
-            print(input)
-            -- Get the index of nextChar
-            local nextCharIndex = input:find(char, i)
-            local spaces = string.rep(" ", nextCharIndex - 1) -- Get the spaces before the nextChar
-            print(spaces .. "^ [SCANNER]: Invalid character found: " .. char)
-            break
+            ScannerErrors.CharacterError(input, char, i, "character")
         end
         -- Assuming the SyntaxTree class is defined elsewhere
         -- return SyntaxTree:new()
