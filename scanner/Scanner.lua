@@ -1,5 +1,3 @@
--- local SyntaxTree = require("scanner.structs.SyntaxTree")
--- local AST = require("scanner.structs.AST.AST")               -- Import the AST class
 local Keyword = require("scanner.structs.Keyword")
 local xy = require("scanner.structs.xy")                 -- Import the xy class
 local Subprogram = require("scanner.structs.Subprogram") -- Import the Subprogram class

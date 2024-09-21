@@ -1,4 +1,4 @@
-local parser = require("parser")
+local parser = require("parser.Parser")
 local treeDrawer = require("TreeDrawer")
 
 local function main()
