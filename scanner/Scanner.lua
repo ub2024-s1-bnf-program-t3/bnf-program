@@ -21,18 +21,18 @@ function Scanner:scan(input)
     local i = 1
     while i <= #input do
         ::continue_loop::
-        print("Current character: " .. input:sub(i, i))
-        print("Current index: " .. i)
+        -- print("Current character: " .. input:sub(i, i))
+        -- print("Current index: " .. i)
         -- Is this the end of the input?
         if i >= #input then
-            print("End of input reached")
+            -- print("End of input reached")
             break
         end
         local char = input:sub(i, i)
 
         -- Check if the character is a '-'
         if char == "-" then
-            print("Separator sign found")
+            -- print("Separator sign found")
             -- Append to the scanner output
             table.insert(output, Separator:new(char))
             i = i + 1
@@ -41,7 +41,7 @@ function Scanner:scan(input)
 
         -- Check if the character is a space
         if char == " " or char == "," then
-            print("Space skipped over")
+            -- print("Space skipped over")
             i = i + 1
             goto continue_loop
         elseif char == "a" or char == "b" or char == "c" or char == "d" or char == "e" or char == "f" then
@@ -153,7 +153,7 @@ function Scanner:scan(input)
             local func = nextCharCheck[nextChar]
             if func then
                 local retVal = func(i)
-                print(retVal == -1 and "Scan failed" or "Keyword: " .. retVal:getValue())
+                -- print(retVal == -1 and "Scan failed" or "Keyword: " .. retVal:getValue())
                 if retVal == -1 then
                     break
                 else
