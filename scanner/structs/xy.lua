@@ -70,4 +70,26 @@ function xy:setY(value)
     self[2]:setValue(value)
 end
 
-return {x = x, y = y, xy = xy}
+-- Class for 'Operator'
+local Operator = {}
+Operator.__index = Operator
+
+local valid_values_operator = {["-"] = true, [","] = true}
+
+function Operator:new(value)
+    assert(valid_values_operator[value], "Invalid value for Operator")
+    local instance = setmetatable({}, Operator)
+    instance.value = value
+    return instance
+end
+
+function Operator:getValue()
+    return self.value
+end
+
+function Operator:setValue(value)
+    assert(valid_values_operator[value], "Invalid value for Operator")
+    self.value = value
+end
+
+return {x = x, y = y, xy = xy, Operator = Operator}
