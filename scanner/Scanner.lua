@@ -85,7 +85,7 @@ function Scanner:scan(input)
                         -- Check if the character after q is r
                         local afterChar = input:sub(i + 2, i + 2)
                         if afterChar == "r" then
-                            i = i + 2 -- Skip the space
+                            i = i + 3 -- Skip the space
                             return Subprogram:new("sqr")
                         else
                             return -1
@@ -95,7 +95,7 @@ function Scanner:scan(input)
                         -- Check if the character after r is i
                         local afterChar = input:sub(i + 2, i + 2)
                         if afterChar == "i" then
-                            i = i + 2 -- Skip the space
+                            i = i + 3 -- Skip the space
                             return Subprogram:new("tri")
                         else
                             return -1
