@@ -15,7 +15,6 @@ function Scanner:new()
 end
 
 function Scanner:scan(input)
-
     -- Array for storing the scanner output
     local output = {}
     
@@ -73,7 +72,7 @@ function Scanner:scan(input)
                     table.insert(output, retVal)
                     -- return retVal -- Bubble upwards
                 else
-                    ScannerErrors.CharacterError(input, nextChar, "token")
+                    ScannerErrors.CharacterError(input, nextChar, i, "token")
                     break
                 end
             end
@@ -104,7 +103,7 @@ function Scanner:scan(input)
                 }
                 local func = nextCharCheck[nextChar]
                 if not func then
-                    ScannerErrors.CharacterError(input, nextChar, "character")
+                    ScannerErrors.CharacterError(input, nextChar, i, "character")
                     break
                 end
                 local func_val = func()
@@ -114,7 +113,7 @@ function Scanner:scan(input)
                     table.insert(output, func_val)
                     -- return func_val -- Bubble upwards   
                 else
-                    ScannerErrors.CharacterError(input, nextChar, "character")
+                    ScannerErrors.CharacterError(input, nextChar, i, "character")
                     break
                 end
             end
@@ -137,7 +136,7 @@ function Scanner:scan(input)
                         i = i + 3 -- Skip the space
                         return Keyword:new("OFF")
                     else
-                        ScannerErrors.CharacterError(input, nextChar, "character")
+                        ScannerErrors.CharacterError(input, nextChar, i, "character")
                         return -1
                     end
                 end
@@ -154,7 +153,7 @@ function Scanner:scan(input)
                     -- return retVal -- Bubble upwards
                 end
             else
-                ScannerErrors.CharacterError(input, nextChar, "character")
+                ScannerErrors.CharacterError(input, nextChar, i, "character")
                 break
             end
         else
