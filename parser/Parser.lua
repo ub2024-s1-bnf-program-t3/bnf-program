@@ -1,15 +1,18 @@
-local AST = require("parser.structs.AST.AST") -- Import the AST class
+local AST = require("parser.structs.AST.AST")              -- Import the AST class
+local ParserErrors = require("parser.errors.ParserErrors") -- Import the ParserErrors module
 Parser = {}
 Parser.__index = Parser
+Input = nil
 
 -- Constructor for creating a new Parser object
-function Parser:new(scanning_device)
+function Parser:new(scanning_device, input)
     local parser = {
         scanning_device = scanning_device,
         current_token = scanning_device[1]:getValue(),
         index = 1
     }
     setmetatable(parser, Parser)
+    Input = input
     return parser
 end
 
@@ -23,16 +26,32 @@ function Parser:parse()
     local root_node = ast
     local statement_list_node = root_node:append("STATEMENT_LIST")
     local current_node = statement_list_node
+    local at_program_end = false
     ::continue::
-    while self.index <= #self.scanning_device do
-        local token = self.scanning_device[self.index]:getValue()
+    while self.index <= #self.scanning_device + 1 do
+        -- Check if we're at the end of the program --
+        if self.index == #self.scanning_device + 1 and at_program_end ~= true then
+            return error("Invalid program footer. Expected 'OFF' at the end of the program");
+        elseif self.index == #self.scanning_device + 1 and at_program_end == true then
+            break
+        end
 
+
+        local token = self.scanning_device[self.index]:getValue()
         if self.index == 1 and token ~= "ON" then
             return error("Invalid program header. Program must start with 'ON'");
         end
 
         -- Program headers --
         if token == "ON" or token == "OFF" then
+            if self.index > 1 and token == "ON" then
+                return error("Invalid program header. Program header must be at the beginning of the program");
+            end
+            if at_program_end ~= true and token == "OFF" then
+                at_program_end = true
+            elseif at_program_end == true and token == "OFF" then
+                return error("Invalid program footer. Expected ONLY ONE 'OFF' at the end of the program");
+            end
             root_node:append(token)
             self.index = self.index + 1
             goto continue
@@ -40,16 +59,22 @@ function Parser:parse()
 
         -- Line separators --
         if token == "-" then
+            -- Check token ahead --
+            local ahead = self.scanning_device[self.index + 1]:getValue()
+            if ahead == "-" then
+                ParserErrors.CharacterError(Input, "-", self.index,
+                "[WW]: Syntax warning. Expected a built-in function after '-'")
+            end
             -- Current node should start again at index 1 --
             current_node = statement_list_node
             self.index = self.index + 1
             goto continue
         end
 
-        -- if self.index == 2 and token ~= "tri" or token ~= "sqr" then
-        --     return error(
-        --         "There must be a built-in function after the program header. Built-in functions must be either 'tri' or 'sqr'");
-        -- end
+        if self.index == 2 and token ~= "tri" and token ~= "sqr" then
+            return error(
+                "There must be a built-in function after the program header. Built-in functions must be either 'tri' or 'sqr'");
+        end
 
         if self.index > 2 and token == "tri" or token == "sqr" then
             local behind = self.scanning_device[self.index - 1]:getValue();
@@ -68,9 +93,6 @@ function Parser:parse()
             current_node = current_node:append("COORDINATES")
             current_node:append(x)
             current_node:append(y)
-
-            self.index = self.index + 1
-            goto continue
         end
         self.index = self.index + 1
     end

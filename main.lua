@@ -24,7 +24,7 @@ while true do
     print("--- End of scanning device values ---")
 
     -- Pass the scanning device to the parser --
-    local parser = Parser:new(scanning_device)
+    local parser = Parser:new(scanning_device, input)
     local ast = parser:parse()
     -- Print the AST for debugging purposes
     print("--- AST ---")
