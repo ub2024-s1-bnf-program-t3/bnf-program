@@ -1,4 +1,5 @@
-local SyntaxTree = require("scanner.structs.SyntaxTree")
+-- local SyntaxTree = require("scanner.structs.SyntaxTree")
+-- local AST = require("scanner.structs.AST.AST")               -- Import the AST class
 local Keyword = require("scanner.structs.Keyword")
 local xy = require("scanner.structs.xy")                 -- Import the xy class
 local Subprogram = require("scanner.structs.Subprogram") -- Import the Subprogram class
@@ -14,6 +15,10 @@ function Scanner:new()
 end
 
 function Scanner:scan(input)
+
+    -- Array for storing the scanner output
+    local output = {}
+    
     -- Scan the input and return the SyntaxTree
     local i = 1
     while i <= #input do
@@ -64,7 +69,9 @@ function Scanner:scan(input)
                 if func then
                     local retVal = func(i)
                     print("Token: " .. retVal:getValue())
-                    return retVal -- Bubble upwards
+                    -- Append to the scanner output
+                    table.insert(output, retVal)
+                    -- return retVal -- Bubble upwards
                 else
                     ScannerErrors.CharacterError(input, nextChar, "token")
                     break
@@ -103,7 +110,9 @@ function Scanner:scan(input)
                 local func_val = func()
                 if func_val ~= -1 then
                     print("Next character is S, or T")
-                    return func_val -- Bubble upwards   
+                    -- Append to the scanner output
+                    table.insert(output, func_val)
+                    -- return func_val -- Bubble upwards   
                 else
                     ScannerErrors.CharacterError(input, nextChar, "character")
                     break
@@ -140,7 +149,9 @@ function Scanner:scan(input)
                 if retVal == -1 then
                     break
                 else
-                    return retVal -- Bubble upwards
+                    -- Append to the scanner output
+                    table.insert(output, retVal)
+                    -- return retVal -- Bubble upwards
                 end
             else
                 ScannerErrors.CharacterError(input, nextChar, "character")
@@ -157,6 +168,7 @@ function Scanner:scan(input)
         -- Assuming the SyntaxTree class is defined elsewhere
         -- return SyntaxTree:new()
     end
+    return output
 end
 
 return Scanner
