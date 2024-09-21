@@ -30,4 +30,9 @@ function AST:print(level)
     end
 end
 
+-- Method to get the root node of the AST
+function AST:getRoot()
+    return self
+end
+
 return AST
