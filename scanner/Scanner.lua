@@ -29,7 +29,15 @@ function Scanner:scan(input)
         end
         local char = input:sub(i, i)
 
-        if char == " " then
+        -- Check if the character is a '-'
+        if char == "-" then
+            print("Separator sign found")
+            i = i + 1
+            goto continue_loop
+        end
+
+        -- Check if the character is a space
+        if char == " " or char == "," then
             print("Space skipped over")
             i = i + 1
             goto continue_loop
