@@ -27,17 +27,15 @@ function Parser:parse()
 
         -- Program headers --
         if token == "ON" or token == "OFF" then
-            current_node = current_node:append(token)
-            self.index = self.index + 1
             current_node:append(token)
+            self.index = self.index + 1
             goto continue
         end
 
         -- Program built-in functions --
         if token == "tri" or token == "sqr" then
-            current_node = current_node:append(token)
-            self.index = self.index + 1
             current_node:append(token)
+            self.index = self.index + 1
             goto continue
         end
 
@@ -45,8 +43,8 @@ function Parser:parse()
         local x = self.scanning_device[self.index]:getX()
         local y = self.scanning_device[self.index]:getY()
         current_node = current_node:append("COORDINATES")
-        current_node:append(x:getValue())
-        current_node:append(y:getValue())
+        current_node:append(x)
+        current_node:append(y)
 
         self.index = self.index + 1
     end

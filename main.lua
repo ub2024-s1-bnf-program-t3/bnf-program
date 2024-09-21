@@ -26,5 +26,8 @@ while true do
     -- Pass the scanning device to the parser --
     local parser = Parser:new(scanning_device)
     local ast = parser:parse()
+    -- Print the AST for debugging purposes
+    print("--- AST ---")
     ast:print()
+    print("--- End of AST ---")
 end
