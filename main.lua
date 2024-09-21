@@ -1,5 +1,6 @@
 local Scanner = require("scanner.Scanner")
 local Parser = require("parser.Parser")
+local Derivator = require("derivator.Derivator")
 local scanner = Scanner:new()
 
 local function getInput()
@@ -30,4 +31,9 @@ while true do
     print("--- AST ---")
     ast:print()
     print("--- End of AST ---")
+    print("--- Derivation ---")
+    local derivator = Derivator:new(parser, ast)
+    derivator:new_derivation()
+    print("--- End of Derivation ---")
+
 end
