@@ -20,11 +20,11 @@ end
 function Parser:parse()
     -- If the scanning device is empty, return an empty AST --
     if #self.scanning_device == 0 then
-        return AST:new("PROGRAM")
+        return AST:new("<proc>")
     end
-    local ast = AST:new("PROGRAM")
+    local ast = AST:new("<proc>")
     local root_node = ast
-    local statement_list_node = root_node:append("STATEMENT_LIST")
+    local statement_list_node = root_node:append("<instructions>")
     local current_node = statement_list_node
     local at_program_end = false
     ::continue::
@@ -85,13 +85,17 @@ function Parser:parse()
 
         -- Program built-in functions --
         if token == "tri" or token == "sqr" then
+            current_node = current_node:append("<line>")
             current_node = current_node:append(token)
             self.index = self.index + 1
             -- Handle other cases (which can only be coordinates and alphanumeric characters) --
             local x = self.scanning_device[self.index]:getX()
             local y = self.scanning_device[self.index]:getY()
-            current_node = current_node:append("COORDINATES")
+            current_node = current_node:append("<xy>")
+            local last_node = current_node
+            current_node = current_node:append("<x>")
             current_node:append(x)
+            current_node = last_node:append("<y>")
             current_node:append(y)
         end
         self.index = self.index + 1
