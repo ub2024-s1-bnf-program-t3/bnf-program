@@ -9,5 +9,6 @@ end
 
 while true do
     local input = getInput()
-    scanner:scan(input)
+    local scanning_device = scanner:scan(input)
+    print(scanning_device:getValue())
 end

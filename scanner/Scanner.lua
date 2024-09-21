@@ -64,6 +64,7 @@ function Scanner:scan(input)
                 if func then
                     local retVal = func(i)
                     print("Token: " .. retVal:getValue())
+                    return retVal -- Bubble upwards
                 else
                     ScannerErrors.CharacterError(input, nextChar, "token")
                     break
@@ -102,6 +103,7 @@ function Scanner:scan(input)
                 local func_val = func()
                 if func_val ~= -1 then
                     print("Next character is S, or T")
+                    return func_val -- Bubble upwards   
                 else
                     ScannerErrors.CharacterError(input, nextChar, "character")
                     break
@@ -137,6 +139,8 @@ function Scanner:scan(input)
                 print(retVal == -1 and "Scan failed" or "Keyword: " .. retVal:getValue())
                 if retVal == -1 then
                     break
+                else
+                    return retVal -- Bubble upwards
                 end
             else
                 ScannerErrors.CharacterError(input, nextChar, "character")
