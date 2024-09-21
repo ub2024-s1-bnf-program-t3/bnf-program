@@ -2,7 +2,7 @@
 local x = {}
 x.__index = x
 
-local valid_values_x = {a = true, b = true, c = true, d = true, e = true, f = true}
+local valid_values_x = {A = true, B = true, C = true, D = true, E = true, F = true}
 
 function x:new(value)
     assert(valid_values_x[value], "Invalid value for x")
@@ -54,6 +54,10 @@ function xy:new(x_value, y_value)
     return instance
 end
 
+function xy:getValue()
+    return self[1]:getValue() .. " " .. self[2]:getValue()
+end
+
 function xy:getX()
     return self[1]:getValue()
 end
@@ -92,4 +96,4 @@ function Operator:setValue(value)
     self.value = value
 end
 
-return {x = x, y = y, xy = xy, Operator = Operator}
+return xy
