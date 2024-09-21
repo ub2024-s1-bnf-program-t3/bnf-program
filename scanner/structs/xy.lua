@@ -2,10 +2,10 @@
 local x = {}
 x.__index = x
 
-local valid_values_x = {A = true, B = true, C = true, D = true, E = true, F = true}
+local valid_values_x = {a = true, b = true, c = true, d = true, e = true, f = true}
 
 function x:new(value)
-    assert(valid_values_x[value], "Invalid value for x")
+    assert(valid_values_x[value], "Invalid value for 'x'")
     local instance = setmetatable({}, x)
     instance.value = value
     return instance
@@ -16,7 +16,7 @@ function x:getValue()
 end
 
 function x:setValue(value)
-    assert(valid_values_x[value], "Invalid value for x")
+    assert(valid_values_x[value], "Invalid value for 'x'")
     self.value = value
 end
 
@@ -28,7 +28,7 @@ y.__index = y
 local valid_values_y = {1, 2, 3, 4, 5, 6}
 
 function y:new(value)
-    assert(valid_values_y[value], "Invalid value for y")
+    assert(valid_values_y[value], "Invalid value for 'y'")
     local instance = setmetatable({}, y)
     instance.value = value
     return instance
@@ -39,7 +39,7 @@ function y:getValue()
 end
 
 function y:setValue(value)
-    assert(valid_values_y[value], "Invalid value for y")
+    assert(valid_values_y[value], "Invalid value for 'y'")
     self.value = value
 end
 

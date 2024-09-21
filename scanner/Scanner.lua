@@ -1,6 +1,8 @@
 local SyntaxTree = require("scanner.structs.SyntaxTree")
 local Keyword = require("scanner.structs.Keyword")
-local xy = require("scanner.structs.xy")    -- Import the xy class
+local xy = require("scanner.structs.xy")                 -- Import the xy class
+local Subprogram = require("scanner.structs.Subprogram") -- Import the Subprogram class
+local ScannerErrors = require("scanner.errors.ScannerErrors")
 
 Scanner = {}
 
@@ -13,21 +15,6 @@ end
 
 function Scanner:scan(input)
     -- Scan the input and return the SyntaxTree
-    local validChars = {
-        A = true,
-        B = true,
-        C = true,
-        D = true,
-        E = true,
-        F = true,
-        ["1"] = true,
-        ["2"] = true,
-        ["3"] = true,
-        ["4"] = true,
-        ["5"] = true,
-        ["6"] = true
-    }
-
     local i = 1
     while i <= #input do
         ::continue_loop::
@@ -44,7 +31,7 @@ function Scanner:scan(input)
             print("Space skipped over")
             i = i + 1
             goto continue_loop
-        elseif char == "A" or char == "B" or char == "C" or char == "D" or char == "E" or char == "F" then
+        elseif char == "a" or char == "b" or char == "c" or char == "d" or char == "e" or char == "f" then
             if i < #input then
                 local nextChar = input:sub(i + 1, i + 1)
                 local nextCharCheck = {
@@ -78,39 +65,53 @@ function Scanner:scan(input)
                     local retVal = func(i)
                     print("Token: " .. retVal:getValue())
                 else
-                    print(input)
-                    -- Get the index of nextChar
-                    local nextCharIndex = input:find(nextChar, i)
-                    local spaces = string.rep(" ", nextCharIndex - 1) -- Get the spaces before the nextChar
-                    print(spaces .. "^ [TK]: Invalid token: " .. nextChar)
+                    ScannerErrors.CharacterError(input, nextChar, "token")
                     break
                 end
             end
-        elseif char == "S" or char == "T" then
+        elseif char == "s" or char == "t" then
             if i < #input then
                 local nextChar = input:sub(i + 1, i + 1)
                 local nextCharCheck = {
-                    -- S = isSQR,
-                    -- T = isTRI
+                    q = function()
+                        -- Check if the character after q is r
+                        local afterChar = input:sub(i + 2, i + 2)
+                        if afterChar == "r" then
+                            i = i + 2 -- Skip the space
+                            return Subprogram:new("sqr")
+                        else
+                            return -1
+                        end
+                    end,
+                    r = function()
+                        -- Check if the character after r is i
+                        local afterChar = input:sub(i + 2, i + 2)
+                        if afterChar == "i" then
+                            i = i + 2 -- Skip the space
+                            return Subprogram:new("tri")
+                        else
+                            return -1
+                        end
+                    end
                 }
                 local func = nextCharCheck[nextChar]
-                if func then
+                if not func then
+                    ScannerErrors.CharacterError(input, nextChar, "character")
+                    break
+                end
+                local func_val = func()
+                if func_val ~= -1 then
                     print("Next character is S, or T")
-                    func()
                 else
-                    print(input)
-                    -- Get the index of nextChar
-                    local nextCharIndex = input:find(nextChar, i)
-                    local spaces = string.rep(" ", nextCharIndex - 1) -- Get the spaces before the nextChar
-                    print(spaces .. "^ [ST]: Invalid character found: " .. nextChar)
+                    ScannerErrors.CharacterError(input, nextChar, "character")
                     break
                 end
             end
             -- print("Space skipped over")
-        -- elseif not validChars[char] then
-        --     -- Just log the error
-        --     return print("[SQR/TRI]: Invalid character found: " .. char)
-        --     -- end
+            -- elseif not validChars[char] then
+            --     -- Just log the error
+            --     return print("[SQR/TRI]: Invalid character found: " .. char)
+            --     -- end
         elseif char == "O" then
             local nextChar = input:sub(i + 1, i + 1)
             local nextCharCheck = {
@@ -125,11 +126,7 @@ function Scanner:scan(input)
                         i = i + 3 -- Skip the space
                         return Keyword:new("OFF")
                     else
-                        print(input)
-                        -- Get the index of nextChar
-                        local nextCharIndex = input:find(nextChar, i)
-                        local spaces = string.rep(" ", nextCharIndex - 1) -- Get the spaces before the nextChar
-                        print(spaces .. "^ [ON/OFF]: Invalid character found: " .. nextChar)
+                        ScannerErrors.CharacterError(input, nextChar, "character")
                         return -1
                     end
                 end
@@ -142,11 +139,7 @@ function Scanner:scan(input)
                     break
                 end
             else
-                print(input)
-                -- Get the index of nextChar
-                local nextCharIndex = input:find(nextChar, i)
-                local spaces = string.rep(" ", nextCharIndex - 1) -- Get the spaces before the nextChar
-                print(spaces .. "^ [ON/OFF]: Invalid character found: " .. nextChar)
+                ScannerErrors.CharacterError(input, nextChar, "character")
                 break
             end
         else
