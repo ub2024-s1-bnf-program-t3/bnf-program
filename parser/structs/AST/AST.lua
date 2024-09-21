@@ -24,7 +24,7 @@ end
 function AST:print(level)
     level = level or 0
     local prefix = string.rep("  ", level)
-    print(prefix .. self.value)
+    print(prefix .. "|_ " .. self.value)
     for _, child in ipairs(self.children) do
         child:print(level + 1)
     end

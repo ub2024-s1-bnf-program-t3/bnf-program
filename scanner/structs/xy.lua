@@ -1,9 +1,10 @@
--- Class for 'x'
+-- Class for 'x' --
 local x = {}
 x.__index = x
 
 local valid_values_x = {a = true, b = true, c = true, d = true, e = true, f = true}
 
+-- Constructor for 'x' --
 function x:new(value)
     assert(valid_values_x[value], "Invalid value for 'x'")
     local instance = setmetatable({}, x)
@@ -21,7 +22,7 @@ function x:setValue(value)
 end
 
 
--- Class for 'y'
+-- Class for 'y' --
 local y = {}
 y.__index = y
 
@@ -43,7 +44,7 @@ function y:setValue(value)
     self.value = value
 end
 
--- Class for 'xy'
+-- Class for 'xy' --
 local xy = {}
 xy.__index = xy
 
@@ -72,28 +73,6 @@ end
 
 function xy:setY(value)
     self[2]:setValue(value)
-end
-
--- Class for 'Operator'
-local Operator = {}
-Operator.__index = Operator
-
-local valid_values_operator = {["-"] = true, [","] = true}
-
-function Operator:new(value)
-    assert(valid_values_operator[value], "Invalid value for Operator")
-    local instance = setmetatable({}, Operator)
-    instance.value = value
-    return instance
-end
-
-function Operator:getValue()
-    return self.value
-end
-
-function Operator:setValue(value)
-    assert(valid_values_operator[value], "Invalid value for Operator")
-    self.value = value
 end
 
 return xy

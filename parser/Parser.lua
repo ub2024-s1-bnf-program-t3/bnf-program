@@ -25,27 +25,40 @@ function Parser:parse()
     while self.index <= #self.scanning_device do
         local token = self.scanning_device[self.index]:getValue()
 
+        if self.index == 1 and token ~= "ON" then
+            return error("Invalid program header. Program must start with 'ON'");
+        end
+
         -- Program headers --
         if token == "ON" or token == "OFF" then
-            current_node:append(token)
+            if token == "OFF" then
+                ast:append(token)
+            else
+                current_node = current_node:append(token)
+            end
             self.index = self.index + 1
             goto continue
         end
+
+        -- if self.index == 2 and token ~= "tri" or token ~= "sqr" then
+        --     return error(
+        --         "There must be a built-in function after the program header. Built-in functions must be either 'tri' or 'sqr'");
+        -- end
 
         -- Program built-in functions --
         if token == "tri" or token == "sqr" then
-            current_node:append(token)
+            current_node = current_node:append(token)
+            self.index = self.index + 1
+            -- Handle other cases (which can only be coordinates and alphanumeric characters) --
+            local x = self.scanning_device[self.index]:getX()
+            local y = self.scanning_device[self.index]:getY()
+            current_node = current_node:append("COORDINATES")
+            current_node:append(x)
+            current_node:append(y)
+
             self.index = self.index + 1
             goto continue
         end
-
-        -- Handle other cases (which can only be coordinates and alphanumeric characters) --
-        local x = self.scanning_device[self.index]:getX()
-        local y = self.scanning_device[self.index]:getY()
-        current_node = current_node:append("COORDINATES")
-        current_node:append(x)
-        current_node:append(y)
-
         self.index = self.index + 1
     end
     return ast
