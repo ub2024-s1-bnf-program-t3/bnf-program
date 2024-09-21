@@ -20,7 +20,9 @@ function Parser:parse()
         return AST:new("PROGRAM")
     end
     local ast = AST:new("PROGRAM")
-    local current_node = ast
+    local root_node = ast
+    local statement_list_node = root_node:append("STATEMENT_LIST")
+    local current_node = statement_list_node
     ::continue::
     while self.index <= #self.scanning_device do
         local token = self.scanning_device[self.index]:getValue()
@@ -31,11 +33,15 @@ function Parser:parse()
 
         -- Program headers --
         if token == "ON" or token == "OFF" then
-            if token == "OFF" then
-                ast:append(token)
-            else
-                current_node = current_node:append(token)
-            end
+            root_node:append(token)
+            self.index = self.index + 1
+            goto continue
+        end
+
+        -- Line separators --
+        if token == "-" then
+            -- Current node should start again at index 1 --
+            current_node = statement_list_node
             self.index = self.index + 1
             goto continue
         end

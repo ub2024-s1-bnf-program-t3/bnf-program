@@ -1,6 +1,7 @@
 local Keyword = require("scanner.structs.Keyword")
 local xy = require("scanner.structs.xy")                 -- Import the xy class
 local Subprogram = require("scanner.structs.Subprogram") -- Import the Subprogram class
+local Separator = require("scanner.structs.Separator")   -- Import the Separator class
 local ScannerErrors = require("scanner.errors.ScannerErrors")
 
 Scanner = {}
@@ -32,6 +33,8 @@ function Scanner:scan(input)
         -- Check if the character is a '-'
         if char == "-" then
             print("Separator sign found")
+            -- Append to the scanner output
+            table.insert(output, Separator:new(char))
             i = i + 1
             goto continue_loop
         end
