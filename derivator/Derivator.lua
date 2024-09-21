@@ -28,9 +28,9 @@ end
 function Derivator:new_derivation()
     local root_node = self.ast:getRoot()
     local steps = {}
-    traverse_node(root_node, "<proc> → begin", steps)
+    traverse_node(root_node, "<proc> → ", steps)
     for i, step in ipairs(steps) do
-        print(string.format("%02d → %s end", i, step))
+        print(string.format("%02d → %s", i, step))
     end
 end
 
