@@ -52,7 +52,7 @@ function Parser:parse()
             end
             if at_program_end ~= true and token == "OFF" then
                 local behind = self.scanning_device[self.index - 1]:getValue()
-                if behind == "ON" then
+                if behind == "ON" or behind == "-" then
                     return ParserErrors.CharacterError(Input, "OFF", self.index,
                         "'OFF' was unexpected here.");
                 end
