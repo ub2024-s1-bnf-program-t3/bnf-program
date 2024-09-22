@@ -15,11 +15,12 @@ function Derivator:new(parser, ast)
     return derivator
 end
 
--- Recursive function to traverse the AST and generate derivation steps
+-- Recursive function to traverse the AST and generate derivation steps using right-to-left preorder traversal
 local function traverse_node(node, derivation, steps)
     if not node then return end
     table.insert(steps, derivation .. " " .. node.value)
-    for _, child in ipairs(node.children) do
+    for i = #node.children, 1, -1 do
+        local child = node.children[i]
         traverse_node(child, derivation .. " " .. (node.value == "<proc>" and node.value .. " →" or node.value), steps)
     end
 end
@@ -27,7 +28,6 @@ end
 -- Method to derive the AST and generate a derivation tree
 function Derivator:new_derivation()
     local root_node = self.ast:getRoot()
-    -- root_node = root_node.children[1] -- Skip the <proc> node since we seemingly only want the statement list
     local steps = {}
     traverse_node(root_node, "<proc> →", steps)
     for i, step in ipairs(steps) do
