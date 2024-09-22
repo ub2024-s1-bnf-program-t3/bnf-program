@@ -72,8 +72,12 @@ function Parser:parse()
                 ParserErrors.CharacterError(Input, "-", self.index,
                     "[WW]: Syntax warning. Expected a built-in function after '-'")
             end
+            if statement_list_node == nil then
+                return error("Syntax error. Expected a built-in function after the program header");
+            end
             -- Current node should start again at index 1 --
             current_node = statement_list_node
+            current_node:append(token)
             statement_list_node = current_node:append("<instructions>")
             current_node = statement_list_node
             self.index = self.index + 1
