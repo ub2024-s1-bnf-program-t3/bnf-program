@@ -89,7 +89,7 @@ function Parser:parse()
                 "There must be a built-in function after the program header. Built-in functions must be either 'tri' or 'sqr'");
         end
 
-        if self.index > 2 and token == "tri" or token == "sqr" then
+        if self.index > 2 and token == "tri" or self.index > 2 and token == "sqr" then
             local behind = self.scanning_device[self.index - 1]:getValue();
             if behind ~= '-' then
                 return error("Syntax error. Expected '-' before built-in function.");
