@@ -4,7 +4,6 @@ Derivator = {}
 
 Derivator.__index = Derivator
 local last_traversal_string = ""
-local ignore_traversal_N = 0
 
 -- Constructor for creating a new Derivator object
 function Derivator:new(parser, ast)
@@ -53,7 +52,7 @@ local function traverse_node(node, steps)
         if last_traversal_string == "" then
             last_traversal_string = children_str
             table.insert(steps, last_traversal_string)
-        elseif ignore_traversal_N == 0 then
+        else
             -- last_traversal_string = last_traversal_string:gsub("<[^<>]*>(?!.*<[^<>]*>)", children_str)
             -- Find the last occurrence of a substring enclosed in angle brackets
             local last_reversal = last_traversal_string:reverse()
@@ -88,6 +87,7 @@ end
 
 -- Method to derive the AST and generate a derivation tree
 function Derivator:new_derivation()
+    last_traversal_string = ""  -- Reset the last traversal string
     local root_node = self.ast:getRoot()
     local steps = {}
     traverse_node(root_node, steps)
