@@ -28,7 +28,7 @@ function Parser:parse()
     end
     local ast = AST:new("<proc>")
     local root_node = ast
-    local statement_list_node = root_node:append("<instructions>")
+    local statement_list_node = nil
     local current_node = statement_list_node
     local at_program_end = false
     ::continue::
@@ -39,7 +39,6 @@ function Parser:parse()
         elseif self.index == #self.scanning_device + 1 and at_program_end == true then
             break
         end
-
 
         local token = self.scanning_device[self.index]:getValue()
         if self.index == 1 and token ~= "ON" then
@@ -56,6 +55,10 @@ function Parser:parse()
             elseif at_program_end == true and token == "OFF" then
                 return error("Invalid program footer. Expected ONLY ONE 'OFF' at the end of the program");
             end
+            if token == "ON" then
+                current_node = root_node:append("<instructions>")
+                statement_list_node = current_node
+            end
             root_node:append(token)
             self.index = self.index + 1
             goto continue
@@ -70,6 +73,8 @@ function Parser:parse()
                     "[WW]: Syntax warning. Expected a built-in function after '-'")
             end
             -- Current node should start again at index 1 --
+            current_node = statement_list_node
+            statement_list_node = current_node:append("<instructions>")
             current_node = statement_list_node
             self.index = self.index + 1
             goto continue
@@ -90,8 +95,8 @@ function Parser:parse()
         -- Program built-in functions --
         if token == "tri" or token == "sqr" then
             current_node = current_node:append("<line>")
-            current_node = current_node:append(token)
             local hooked_node = current_node
+            current_node = current_node:append(token)
             self.index = self.index + 1
             local loop_count = token == "tri" and 3 or 2
             for i = 1, loop_count do
