@@ -51,6 +51,11 @@ function Parser:parse()
                 return error("Invalid program header. Program header must be at the beginning of the program");
             end
             if at_program_end ~= true and token == "OFF" then
+                local behind = self.scanning_device[self.index - 1]:getValue()
+                if behind == "ON" then
+                    return ParserErrors.CharacterError(Input, "OFF", self.index,
+                        "'OFF' was unexpected here.");
+                end
                 at_program_end = true
             elseif at_program_end == true and token == "OFF" then
                 return error("Invalid program footer. Expected ONLY ONE 'OFF' at the end of the program");
@@ -67,10 +72,18 @@ function Parser:parse()
         -- Line separators --
         if token == "-" then
             -- Check token ahead --
-            local ahead = self.scanning_device[self.index + 1]:getValue()
+            local ahead = self.scanning_device[self.index + 1]
+            local scanner = self.scanning_device
+            if not ahead then
+                return ParserErrors.CharacterError(Input,
+                    scanner[self.index - 1]:getValue() .. token,
+                    self.index,
+                    "[EE]: Syntax error. Expected a built-in function after " .. "'" .. token .. "'")
+            end
+            ahead = ahead:getValue()
             if ahead == "-" then
                 ParserErrors.CharacterError(Input, "-", self.index,
-                    "[WW]: Syntax warning. Expected a built-in function after '-'")
+                    "[WW]: Syntax warning. Expected a built-in function after " .. "'" .. token .. "'")
             end
             if statement_list_node == nil then
                 return error("Syntax error. Expected a built-in function after the program header");
