@@ -32,6 +32,10 @@ while true do
     -- Pass the scanning device to the parser --
     local parser = Parser:new(scanning_device, input)
     local ast = parser:parse()
+    if ast then
+        print("Error in parsing")
+        goto continue
+    end
     -- Print the AST for debugging purposes
     print("--- AST ---")
     if ast ~= -1 then

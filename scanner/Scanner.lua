@@ -168,6 +168,7 @@ function Scanner:scan(input)
             end
         else
             ScannerErrors.CharacterError(input, char, i, "character")
+            break
         end
         -- Assuming the SyntaxTree class is defined elsewhere
         -- return SyntaxTree:new()
