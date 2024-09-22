@@ -1,5 +1,5 @@
 local AST = require("parser.structs.AST.AST")              -- Import the AST class
-local Scanner = require("scanner.Scanner")                  -- Import the Scanner module
+local Scanner = require("scanner.Scanner")                 -- Import the Scanner module
 local ParserErrors = require("parser.errors.ParserErrors") -- Import the ParserErrors module
 local xy = require("scanner.structs.xy")                   -- Import the xy class
 Parser = {}
@@ -55,11 +55,11 @@ function Parser:parse()
             elseif at_program_end == true and token == "OFF" then
                 return error("Invalid program footer. Expected ONLY ONE 'OFF' at the end of the program");
             end
+            root_node:append(token) -- Prioritize the program header to the root node before moving to the instructions
             if token == "ON" then
                 current_node = root_node:append("<instructions>")
                 statement_list_node = current_node
             end
-            root_node:append(token)
             self.index = self.index + 1
             goto continue
         end
@@ -104,11 +104,13 @@ function Parser:parse()
                 local token = self.scanning_device[self.index + i - 1]
                 -- Check if token is nil --
                 if not token then
-                    return ParserErrors.CharacterError(Input, self.scanning_device[self.index - 1]:getValue(), self.index,
+                    return ParserErrors.CharacterError(Input, self.scanning_device[self.index - 1]:getValue(), self
+                        .index,
                         "[EE]: Syntax error. Expected an additional coordinate after built-in function.\nAdditionally, an EOF was unexpectedly reached.")
                 end
                 if token.__index ~= xy then -- If token is not a coordinate
-                    return ParserErrors.CharacterError(Input, self.scanning_device[self.index - 1]:getValue(), self.index,
+                    return ParserErrors.CharacterError(Input, self.scanning_device[self.index - 1]:getValue(), self
+                        .index,
                         "[EE]: Syntax error. Expected an additional coordinate after built-in function")
                 end
                 -- Handle other cases (which can only be coordinates and alphanumeric characters) --
