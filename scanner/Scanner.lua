@@ -5,6 +5,7 @@ local Separator = require("scanner.structs.Separator")   -- Import the Separator
 local ScannerErrors = require("scanner.errors.ScannerErrors")
 
 Scanner = {}
+Scanner.__index = Scanner
 
 function Scanner:new()
     local o = {}

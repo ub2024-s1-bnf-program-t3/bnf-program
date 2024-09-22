@@ -7,7 +7,7 @@ function ParserErrors.CharacterError(input, nextChar, i, error)
     -- print(nextChar)
     -- print(nextCharIndex)
     local spaces = string.rep(" ", nextCharIndex - 1) -- Get the spaces before the nextChar
-    print(spaces .. "^ " .. error)
+    print(spaces .. "^ ParseError: " .. error)
     return -1
 end
 

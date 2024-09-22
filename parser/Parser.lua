@@ -1,4 +1,5 @@
 local AST = require("parser.structs.AST.AST")              -- Import the AST class
+local Scanner = require("scanner.Scanner")                  -- Import the Scanner module
 local ParserErrors = require("parser.errors.ParserErrors") -- Import the ParserErrors module
 local xy = require("scanner.structs.xy")                   -- Import the xy class
 Parser = {}
@@ -7,6 +8,8 @@ Input = nil
 
 -- Constructor for creating a new Parser object
 function Parser:new(scanning_device, input)
+    assert(scanning_device, "Invalid scanning device")
+    assert(scanning_device.__index ~= Scanner, "Invalid scanning device")
     local parser = {
         scanning_device = scanning_device,
         current_token = scanning_device[1]:getValue(),

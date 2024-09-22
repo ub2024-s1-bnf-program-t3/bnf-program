@@ -10,7 +10,7 @@ end
 
 while true do
     ::continue::
-    print("--- REPL ---")
+    print("\n--- REPL ---")
     print("Enter 'HALT' to exit the program")
     local input = getInput()
     if input == "HALT" then
@@ -19,6 +19,10 @@ while true do
     local scanning_device = scanner:scan(input)
     -- print(scanning_device)
     -- Go through the array array and print the values
+    if(#scanning_device == 0) then
+        print("Error in scanning. Please check your input.")
+        goto continue
+    end
     print("--- Scanning device values ---")
     for i = 1, #scanning_device do
         print(scanning_device[i]:getValue())
