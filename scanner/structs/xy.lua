@@ -56,7 +56,7 @@ function xy:new(x_value, y_value)
 end
 
 function xy:getValue()
-    return self[1]:getValue() .. " " .. self[2]:getValue()
+    return self[1]:getValue() .. self[2]:getValue()
 end
 
 function xy:getX()

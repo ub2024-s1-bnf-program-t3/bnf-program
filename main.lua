@@ -9,6 +9,7 @@ local function getInput()
 end
 
 while true do
+    ::continue::
     print("--- REPL ---")
     print("Enter 'HALT' to exit the program")
     local input = getInput()
@@ -29,11 +30,16 @@ while true do
     local ast = parser:parse()
     -- Print the AST for debugging purposes
     print("--- AST ---")
-    ast:print()
+    if ast ~= -1 then
+        ast:print()
+    end
     print("--- End of AST ---")
     print("--- Derivation ---")
+    if ast == -1 then
+        print("Error in parsing")
+        goto continue
+    end
     local derivator = Derivator:new(parser, ast)
     derivator:new_derivation()
     print("--- End of Derivation ---")
-
 end

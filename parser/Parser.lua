@@ -1,5 +1,6 @@
 local AST = require("parser.structs.AST.AST")              -- Import the AST class
 local ParserErrors = require("parser.errors.ParserErrors") -- Import the ParserErrors module
+local xy = require("scanner.structs.xy")                   -- Import the xy class
 Parser = {}
 Parser.__index = Parser
 Input = nil
@@ -89,11 +90,22 @@ function Parser:parse()
             current_node = current_node:append(token)
             local hooked_node = current_node
             self.index = self.index + 1
-            for i = 1, 2 do
+            local loop_count = token == "tri" and 3 or 2
+            for i = 1, loop_count do
                 current_node = hooked_node
+                local token = self.scanning_device[self.index + i - 1]
+                -- Check if token is nil --
+                if not token then
+                    return ParserErrors.CharacterError(Input, self.scanning_device[self.index - 1]:getValue(), self.index,
+                        "[EE]: Syntax error. Expected an additional coordinate after built-in function.\nAdditionally, an EOF was unexpectedly reached.")
+                end
+                if token.__index ~= xy then -- If token is not a coordinate
+                    return ParserErrors.CharacterError(Input, self.scanning_device[self.index - 1]:getValue(), self.index,
+                        "[EE]: Syntax error. Expected an additional coordinate after built-in function")
+                end
                 -- Handle other cases (which can only be coordinates and alphanumeric characters) --
-                local x = self.scanning_device[self.index + i - 1]:getX()
-                local y = self.scanning_device[self.index + i - 1]:getY()
+                local x = token:getX()
+                local y = token:getY()
                 current_node = current_node:append("<xy>")
                 local last_node = current_node
                 current_node = current_node:append("<x>")
