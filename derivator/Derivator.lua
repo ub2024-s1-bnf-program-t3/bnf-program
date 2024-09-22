@@ -25,12 +25,20 @@ local function traverse_node(node, steps)
     for _, child in ipairs(node.children) do
         table.insert(children_values, child.value)
     end
-    local children_str = table.concat(children_values, " ")
+    -- Check if these children contain the string "<x>" and "<y>"
+    -- If it does we need to concatenate the children's values without any spaces
+    local children_str_nospace = table.concat(children_values, "")
+    local children_str = ""
+    if children_str_nospace:find("<x>") ~= nil and children_str_nospace:find("<y>") ~= nil then
+        children_str = children_str_nospace
+    else
+        children_str = table.concat(children_values, " ")
+    end
     -- local children_str = node.value
     if children_str ~= "" then
         -- ON tri a1, a2, d4 - sqr a1, d2 - tri b1, b2, c3 OFF --
-        print("Ignoring " .. ignore_traversal_N .. " replacements")
-        print("Children string: " .. children_str)
+        -- print("Ignoring " .. ignore_traversal_N .. " replacements")
+        -- print("Children string: " .. children_str)
 
         -- Check if the children_str is a non-terminal value
         -- if children_str:find("<") == nil then
@@ -52,13 +60,13 @@ local function traverse_node(node, steps)
             -- print("Last traversal string: " .. last_reversal)
             last_reversal = string.match(last_reversal, ">[^<>]*<")
             if last_reversal ~= nil then
-                print("Last reversal: " .. last_reversal)
+                -- print("Last reversal: " .. last_reversal)
                 -- last_reversal = last_reversal:reverse()
-                print("Last traversal string (1): " .. last_traversal_string)
+                -- print("Last traversal string (1): " .. last_traversal_string)
                 -- Make the replacement
                 last_traversal_string = last_traversal_string:reverse()
                 last_traversal_string = last_traversal_string:gsub(last_reversal, children_str:reverse(), 1)
-                print("Last traversal string (2): " .. last_traversal_string)
+                -- print("Last traversal string (2): " .. last_traversal_string)
                 last_traversal_string = last_traversal_string:reverse()
                 -- string.match (testvar:reverse(), "(%d+%.?%d*)"):reverse()
                 -- string.match (testvar, ".*%f[%d.](%d*%.?%d+)")
