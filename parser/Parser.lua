@@ -81,9 +81,13 @@ function Parser:parse()
                     "[EE]: Syntax error. Expected a built-in function after " .. "'" .. token .. "'")
             end
             ahead = ahead:getValue()
-            if ahead == "-" then
-                ParserErrors.CharacterError(Input, "-", self.index,
-                    "[WW]: Syntax warning. Expected a built-in function after " .. "'" .. token .. "'")
+            -- if ahead == "-" then
+            --     ParserErrors.CharacterError(Input, "-", self.index,
+            --         "[WW]: Syntax warning. Expected a built-in function after " .. "'" .. token .. "'")
+            -- end
+            if ahead ~= "tri" and ahead ~= "sqr" then
+                return ParserErrors.CharacterError(Input, token, self.index,
+                    "[EE]: Syntax error. Expected a built-in function after " .. "'" .. token .. "'")
             end
             if statement_list_node == nil then
                 return error("Syntax error. Expected a built-in function after the program header");
