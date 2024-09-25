@@ -53,13 +53,26 @@ while true do
         goto continue
     end
 
-    print("\n--- Abstract Syntax Tree (AST) ---")
-    ast:print()
-    print("--- End of AST ---\n")
-
     -- Derivation process
     print("\n--- Derivation Process ---")
     local derivator = Derivator:new(parser, ast)
     derivator:new_derivation()
     print("--- End of Derivation ---\n")
+
+    -- Wait for the user to press Enter to display the AST
+    io.write("Press Enter to display the Abstract Syntax Tree (AST)...")
+    io.read() -- wait for Enter key press
+
+    print("\n--- Abstract Syntax Tree (AST) ---")
+    ast:print()
+    print("--- End of AST ---\n")
+
+    -- Ask the user if they want to try another input or halt
+    io.write("Type 'HALT' to exit, or press Enter to try another input: ")
+    local answer = io.read():upper()
+
+    if answer == "HALT" then
+        print("Exiting the program. Goodbye!")
+        break
+    end
 end
