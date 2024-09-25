@@ -1,0 +1,37 @@
+===============================================================================
+EXTENSION NAME : linecounter
+EXTENSION VERSION : 0.2.7
+-------------------------------------------------------------------------------
+count time : 2024-09-22 06:42:13
+count workspace : /workspaces/bnf-program
+total files : 19
+total code lines : 1074
+total comment lines : 0
+total blank lines : 181
+
+    statistics
+   |      extension|     total code|  total comment|    total blank|percent|
+   -------------------------------------------------------------------------
+   |            .md|              1|              0|              0|  0.093|
+   |           .lua|           1073|              0|            181| 1.0e+2|
+   -------------------------------------------------------------------------
+derivator/Derivator.lua, code is 25, comment is 0, blank is 3.
+main.lua, code is 46, comment is 0, blank is 3.
+parser/errors/ParserErrors.lua, code is 12, comment is 0, blank is 2.
+parser/Parser.lua, code is 34, comment is 0, blank is 2.
+parser/structs/AST/AST.lua, code is 32, comment is 0, blank is 6.
+plps1_complete.lua, code is 380, comment is 0, blank is 82.
+README.md, code is 1, comment is 0, blank is 0.
+reference/grammar.lua, code is 10, comment is 0, blank is 1.
+reference/main.lua, code is 20, comment is 0, blank is 4.
+reference/parser.lua, code is 13, comment is 0, blank is 3.
+reference/test.lua, code is 125, comment is 0, blank is 24.
+reference/TreeDrawer.lua, code is 55, comment is 0, blank is 6.
+scanner/errors/ScannerErrors.lua, code is 10, comment is 0, blank is 2.
+scanner/Scanner.lua, code is 172, comment is 0, blank is 7.
+scanner/structs/Keyword.lua, code is 20, comment is 0, blank is 5.
+scanner/structs/Separator.lua, code is 13, comment is 0, blank is 3.
+scanner/structs/Subprogram.lua, code is 22, comment is 0, blank is 4.
+scanner/structs/SyntaxTree.lua, code is 24, comment is 0, blank is 6.
+scanner/structs/xy.lua, code is 60, comment is 0, blank is 18.
+===============================================================================
