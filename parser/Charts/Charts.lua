@@ -9,7 +9,8 @@ function Charts:new(ast)
         current_childn_o = {},
         index = 0,
         index_length = 0,
-        current_single_values = ""
+        current_single_values = "",
+        earlier_separation = ""
     }
     setmetatable(charts, Charts)
     return charts
@@ -34,40 +35,31 @@ function Charts:traverse_node(node, reference_to)
 
     local amount_of_separation = reference_to;
     -- print("Amount of separation", amount_of_separation)
-    local inserts = string.rep("--", amount_of_separation)                                            -- Amount of branch separation to create
-    local spaces_inserts = string.gsub(inserts, "-", " ");                                            -- Amount of spaces to skip
-    spaces_inserts = spaces_inserts .. string.rep(" ", self.index_length + 6)                         -- Amount of spaces to skip
+    self.index = (self.index == 0) and 1 or self.index
+    local inserts = string.rep("--", amount_of_separation * self.index) -- Amount of branch separation to create
+    local spaces_inserts = string.gsub(inserts, "-", " ");              -- Amount of spaces to skip
+    spaces_inserts = spaces_inserts ..
+    string.rep(" ", self.index_length * self.index)                 -- Amount of spaces to skip
+    self.earlier_separation = self.earlier_separation .. spaces_inserts
+    spaces_inserts = spaces_inserts .. self.earlier_separation
     local spaces_inserts_child = string.gsub(inserts, "-", " ") ..
-    string.rep(" ", self.index_length)                                                                -- (Children) Amount of spaces to skip
+        string.rep(" ", self.index_length)                              -- (Children) Amount of spaces to skip
     local branch = ""
     -- Print the starting line (connector)
 
-    -- Check to see if this is a char
-    if node.value then
-        local value = node.value
-        local value_length = string.len(value)
-        if value_length == 1 and value ~= "" then
-            value = spaces_inserts .. value
-            self.current_single_values = self.current_single_values .. spaces_inserts .. value
-        else 
-            -- table.insert(self.line, self.current_single_values)
-            self.current_single_values = ""
-        end
-    end
-
-    if reference_to > 0 and #node.children >= 2 then
+    if reference_to > 0 and #node.children >= 2 or node.value == "<instructions>" then
         -- amount of tabs required is equal to reference to
         -- local amount_of_tabs = reference_to
         -- local prefix = string.rep("  ", amount_of_tabs) -- Amount of spaces to skip
         -- prefix = spaces_inserts .. prefix .. "│"
-        local prefix = spaces_inserts .. "│"
+        local prefix = spaces_inserts_child .. spaces_inserts .. "│"
         table.insert(self.line, prefix);
     end
     -- if #node.children == 1 then
     --     branch = spaces_inserts .. "┬"
     -- end
     if #node.children >= 2 then
-        branch = "┌──" -- The full branch
+        branch = spaces_inserts .. "┌──" -- The full branch
     end
 
     if #node.children >= 2 then
@@ -87,7 +79,25 @@ function Charts:traverse_node(node, reference_to)
         table.insert(self.line, branch); -- Insert the branch
     end
     local children_values_str = table.concat(children_values, spaces_inserts_child);
-    table.insert(self.line, children_values_str); -- Insert the children values
+
+    if string.len(node.value) ~= 1 and self.current_single_values == "" then
+        table.insert(self.line, spaces_inserts .. children_values_str); -- Insert the children values
+    end
+
+    -- Check to see if this is a char
+    if node.value then
+        local value = node.value
+        local value_length = string.len(value)
+        if value_length == 1 and value ~= "" and self.current_single_values ~= "" then
+            value = spaces_inserts .. value
+            self.current_single_values = self.current_single_values .. spaces_inserts .. value
+        else
+            if self.current_single_values ~= "" then
+                table.insert(self.line, self.current_single_values)
+                self.current_single_values = ""
+            end
+        end
+    end
 
 
     -- Get the index of the current node's value inside of children_values
