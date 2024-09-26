@@ -43,10 +43,10 @@ function Charts:traverse_node(node, reference_to)
     self.earlier_separation = self.earlier_separation .. spaces_inserts
     spaces_inserts = spaces_inserts .. self.earlier_separation
     local spaces_inserts_child = string.gsub(inserts, "-", " ") ..
-        string.rep(" ", self.index_length)                              -- (Children) Amount of spaces to skip
+    string.rep(" ", self.index_length) -- (Children) Amount of spaces to skip
     local branch = ""
     -- Print the starting line (connector)
-
+    
     if reference_to > 0 and #node.children >= 2 or node.value == "<instructions>" then
         -- amount of tabs required is equal to reference to
         -- local amount_of_tabs = reference_to
@@ -61,7 +61,7 @@ function Charts:traverse_node(node, reference_to)
     if #node.children >= 2 then
         branch = spaces_inserts .. "┌──" -- The full branch
     end
-
+    
     if #node.children >= 2 then
         for i, child in ipairs(node.children) do
             -- Are we at the last child?
@@ -71,6 +71,7 @@ function Charts:traverse_node(node, reference_to)
             -- Find the length of the child value
             local child_value_length = string.len(child.value)
             local inserts = string.rep("-", child_value_length)
+            inserts = inserts .. string.gsub(self.earlier_separation, " ", "-")
             branch = branch .. inserts .. "──┐" -- Extend the branch out further
         end
     end
@@ -78,7 +79,7 @@ function Charts:traverse_node(node, reference_to)
     if #node.children >= 1 and branch ~= "" then
         table.insert(self.line, branch); -- Insert the branch
     end
-    local children_values_str = table.concat(children_values, spaces_inserts_child);
+    local children_values_str = table.concat(children_values, spaces_inserts);
 
     if string.len(node.value) ~= 1 and self.current_single_values == "" then
         table.insert(self.line, spaces_inserts .. children_values_str); -- Insert the children values
