@@ -1,6 +1,7 @@
 local Scanner = require("scanner.Scanner")
 local Parser = require("parser.Parser")
 local Derivator = require("derivator.Derivator")
+local Charts = require("parser.Charts.Charts")
 local scanner = Scanner:new()
 
 local function getInput()
@@ -61,14 +62,15 @@ while true do
 
     -- Wait for the user to press Enter to display the AST
     io.write("Press Enter to display the Abstract Syntax Tree (AST)...")
-    io.read() -- wait for Enter key press
+    io.read() --- Wait for the user to press Enter
 
     print("\n--- Abstract Syntax Tree (AST) ---")
-    ast:print()
+    Charts:new(ast):print()
+    -- ast:print()
     print("--- End of AST ---\n")
 
     -- Ask the user if they want to try another input or halt
-    io.write("Type 'HALT' to exit, or press Enter to try another input: ")
+    io.write("Type 'HALT' to exit, or press Enter to try another input...")
     local answer = io.read():upper()
 
     if answer == "HALT" then
