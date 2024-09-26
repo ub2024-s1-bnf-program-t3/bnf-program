@@ -38,11 +38,11 @@ while true do
         goto continue
     end
 
-    print("\n--- Scanning Results ---")
-    for i = 1, #scanning_device do
-        print("Token: " .. scanning_device[i]:getValue())
-    end
-    print("--- End of Scanning Results ---\n")
+    -- print("\n--- Scanning Results ---")
+    -- for i = 1, #scanning_device do
+    --     print("Token: " .. scanning_device[i]:getValue())
+    -- end
+    -- print("--- End of Scanning Results ---\n")
 
     -- Pass the scanning device to the parser
     local parser = Parser:new(scanning_device, input)
@@ -61,13 +61,13 @@ while true do
     print("--- End of Derivation ---\n")
 
     -- Wait for the user to press Enter to display the AST
-    io.write("Press Enter to display the Abstract Syntax Tree (AST)...")
+    io.write("Press Enter to display the Parse Tree (PT)...")
     io.read() --- Wait for the user to press Enter
 
-    print("\n--- Abstract Syntax Tree (AST) ---")
+    print("\n--- Parse Tree (PT) ---")
     Charts:new(ast):print()
     -- ast:print()
-    print("--- End of AST ---\n")
+    print("--- End of PT ---\n")
 
     -- Ask the user if they want to try another input or halt
     io.write("Type 'HALT' to exit, or press Enter to try another input...")

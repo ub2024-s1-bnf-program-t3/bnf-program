@@ -100,7 +100,7 @@ function Charts:traverse_node(node, reference_to)
         if self.current_single_values ~= "" then
             -- Check if there are at least 2 characters (excluding spaces)
             local non_space_value = self.current_single_values:gsub("%s+", "")
-            print("Non-space: ", non_space_value)
+            -- print("Non-space: ", non_space_value)
             if #non_space_value >= 2 then
                 table.insert(self.line, self.current_single_values)
                 self.current_single_values = ""
