@@ -36,11 +36,11 @@ function Charts:traverse_node(node, reference_to)
     local amount_of_separation = reference_to;
     -- print("Amount of separation", amount_of_separation)
     self.index = (self.index == 0) and 1 or self.index
-    local inserts = string.rep("--", amount_of_separation * self.index) -- Amount of branch separation to create
+    local inserts = string.rep("--", amount_of_separation) -- Amount of branch separation to create
     local spaces_inserts = string.gsub(inserts, "-", " ");              -- Amount of spaces to skip
     spaces_inserts = spaces_inserts ..
-    string.rep(" ", self.index_length * self.index)                 -- Amount of spaces to skip
-    self.earlier_separation = self.earlier_separation .. spaces_inserts
+    string.rep(" ", self.index_length)                 -- Amount of spaces to skip
+    self.earlier_separation = self.earlier_separation .. " " -- This adjusts the linear width of the chart
     spaces_inserts = spaces_inserts .. self.earlier_separation
     local spaces_inserts_child = string.gsub(inserts, "-", " ") ..
     string.rep(" ", self.index_length) -- (Children) Amount of spaces to skip
