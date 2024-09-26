@@ -37,19 +37,20 @@ function Charts:traverse_node(node, reference_to)
     local amount_of_separation = reference_to;
     -- print("Amount of separation", amount_of_separation)
     self.index = (self.index == 0) and 1 or self.index
-    local inserts = string.rep("--", amount_of_separation * self.index) -- Amount of branch separation to create
-    local spaces_inserts = string.gsub(inserts, "-", " ");              -- Amount of spaces to skip
+    local inserts = string.rep("--", amount_of_separation * self.index)       -- Amount of branch separation to create
+    local spaces_inserts = string.gsub(inserts, "-", " ");                    -- Amount of spaces to skip
     spaces_inserts = spaces_inserts ..
-    string.rep(" ", self.index_length * self.index)                 -- Amount of spaces to skip
+        string.rep(" ", self.index_length * self.index)                       -- Amount of spaces to skip
     local substring_length = math.floor((self.index_length * self.index) / 2) -- Example length for the substring
     local substring = string.sub(spaces_inserts, 1, substring_length)
-    self.earlier_separation = self.earlier_separation .. substring -- This adjusts the linear width of the chart
+    self.earlier_separation = self.earlier_separation ..
+        substring -- This adjusts the linear width of the chart
     spaces_inserts = spaces_inserts .. self.earlier_separation
     local spaces_inserts_child = string.gsub(inserts, "-", " ") ..
-    string.rep(" ", self.index_length) -- (Children) Amount of spaces to skip
+        string.rep(" ", self.index_length) -- (Children) Amount of spaces to skip
     local branch = ""
     -- Print the starting line (connector)
-    
+
     if reference_to > 0 and #node.children >= 2 or node.value == "<instructions>" then
         -- amount of tabs required is equal to reference to
         -- local amount_of_tabs = reference_to
@@ -65,7 +66,7 @@ function Charts:traverse_node(node, reference_to)
     if #node.children >= 2 then
         branch = spaces_inserts .. "┌──" -- The full branch
     end
-    
+
     if #node.children >= 2 then
         for i, child in ipairs(node.children) do
             -- Are we at the last child?
@@ -85,24 +86,30 @@ function Charts:traverse_node(node, reference_to)
     end
     local children_values_str = table.concat(children_values, spaces_inserts);
 
-    if string.len(node.value) ~= 1 and self.current_single_values == "" then
+    local non_space_value = children_values_str:gsub("%s+", "")
+    if string.len(non_space_value) ~= 1 and self.current_single_values == "" then
         table.insert(self.line, spaces_inserts .. children_values_str); -- Insert the children values
     end
-
     -- Check to see if this is a char
-    if node.value then
+    if node.value ~= nil then
         local value = node.value
         local value_length = string.len(value)
-        if value_length == 1 and value ~= "" and self.current_single_values ~= "" then
-            value = spaces_inserts .. value
+        if value_length == 1 and value ~= "" and value ~= "-" then
             self.current_single_values = self.current_single_values .. spaces_inserts .. value
-        else
-            if self.current_single_values ~= "" then
+        end
+        if self.current_single_values ~= "" then
+            -- Check if there are at least 2 characters (excluding spaces)
+            local non_space_value = self.current_single_values:gsub("%s+", "")
+            print("Non-space: ", non_space_value)
+            if #non_space_value >= 2 then
                 table.insert(self.line, self.current_single_values)
                 self.current_single_values = ""
             end
+            -- else
+            --     table.insert(self.line, spaces_inserts .. children_values_str); -- Insert the children values
         end
     end
+
 
 
     -- Get the index of the current node's value inside of children_values
