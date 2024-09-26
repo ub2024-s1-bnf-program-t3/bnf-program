@@ -8,7 +8,8 @@ function Charts:new(ast)
         current_node = nil,
         current_childn_o = {},
         index = 0,
-        index_length = 0
+        index_length = 0,
+        current_single_values = ""
     }
     setmetatable(charts, Charts)
     return charts
@@ -20,7 +21,7 @@ end
 
 function Charts:traverse_node(node, reference_to)
     if not node then return end
-    print("Hi", node, reference_to)
+    -- print("Hi", node, reference_to)
     reference_to = reference_to or 0
 
     -- Create a string for all the current children's values of the node we're in
@@ -30,15 +31,31 @@ function Charts:traverse_node(node, reference_to)
         -- print("Node value: " .. child.value)
     end
 
-    
+
     local amount_of_separation = reference_to;
     -- print("Amount of separation", amount_of_separation)
-    local inserts = string.rep("--", amount_of_separation) -- Amount of branch separation to create
-    local spaces_inserts = string.gsub(inserts, "-", " "); -- Amount of spaces to skip
-    spaces_inserts = spaces_inserts .. string.rep(" ", self.index_length) -- Amount of spaces to skip
+    local inserts = string.rep("--", amount_of_separation)                                            -- Amount of branch separation to create
+    local spaces_inserts = string.gsub(inserts, "-", " ");                                            -- Amount of spaces to skip
+    spaces_inserts = spaces_inserts .. string.rep(" ", self.index_length + 6)                         -- Amount of spaces to skip
+    local spaces_inserts_child = string.gsub(inserts, "-", " ") ..
+    string.rep(" ", self.index_length)                                                                -- (Children) Amount of spaces to skip
     local branch = ""
     -- Print the starting line (connector)
-    if reference_to > 0 then
+
+    -- Check to see if this is a char
+    if node.value then
+        local value = node.value
+        local value_length = string.len(value)
+        if value_length == 1 and value ~= "" then
+            value = spaces_inserts .. value
+            self.current_single_values = self.current_single_values .. spaces_inserts .. value
+        else 
+            -- table.insert(self.line, self.current_single_values)
+            self.current_single_values = ""
+        end
+    end
+
+    if reference_to > 0 and #node.children >= 2 then
         -- amount of tabs required is equal to reference to
         -- local amount_of_tabs = reference_to
         -- local prefix = string.rep("  ", amount_of_tabs) -- Amount of spaces to skip
@@ -46,9 +63,9 @@ function Charts:traverse_node(node, reference_to)
         local prefix = spaces_inserts .. "│"
         table.insert(self.line, prefix);
     end
-    if #node.children == 1 then
-        branch = spaces_inserts .. "┬"
-    end
+    -- if #node.children == 1 then
+    --     branch = spaces_inserts .. "┬"
+    -- end
     if #node.children >= 2 then
         branch = "┌──" -- The full branch
     end
@@ -66,11 +83,11 @@ function Charts:traverse_node(node, reference_to)
         end
     end
 
-    if #node.children >= 1 then
-        table.insert(self.line, branch);                   -- Insert the branch
+    if #node.children >= 1 and branch ~= "" then
+        table.insert(self.line, branch); -- Insert the branch
     end
-    local children_values_str = table.concat(children_values, spaces_inserts);
-    table.insert(self.line, children_values_str);          -- Insert the children values
+    local children_values_str = table.concat(children_values, spaces_inserts_child);
+    table.insert(self.line, children_values_str); -- Insert the children values
 
 
     -- Get the index of the current node's value inside of children_values
@@ -79,10 +96,10 @@ function Charts:traverse_node(node, reference_to)
             if self.current_node == nil then
                 break
             end
-            print("Value", child, self.current_node.value, index)
+            -- print("Value", child, self.current_node.value, index)
             if child == self.current_node.value then
-                print("Value (2)", child, self.current_node.value, index)
-                print("INdex", index)
+                -- print("Value (2)", child, self.current_node.value, index)
+                -- print("INdex", index)
                 self.index = index
                 self.index_length = string.len(self.current_node.value)
                 break
@@ -95,7 +112,7 @@ function Charts:traverse_node(node, reference_to)
         if child then
             -- if self.index then
             self.current_node = child
-            self:traverse_node(child, self.index or 0)     -- Center aligned
+            self:traverse_node(child, self.index or 0) -- Center aligned
             -- end
         else
             print("Error: root_node is nil")
