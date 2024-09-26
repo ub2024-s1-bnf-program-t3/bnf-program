@@ -40,7 +40,9 @@ function Charts:traverse_node(node, reference_to)
     local spaces_inserts = string.gsub(inserts, "-", " ");              -- Amount of spaces to skip
     spaces_inserts = spaces_inserts ..
     string.rep(" ", self.index_length * self.index)                 -- Amount of spaces to skip
-    self.earlier_separation = self.earlier_separation .. " " -- This adjusts the linear width of the chart
+    local substring_length = math.floor((self.index_length * self.index) / 2) -- Example length for the substring
+    local substring = string.sub(spaces_inserts, 1, substring_length)
+    self.earlier_separation = self.earlier_separation .. substring -- This adjusts the linear width of the chart
     spaces_inserts = spaces_inserts .. self.earlier_separation
     local spaces_inserts_child = string.gsub(inserts, "-", " ") ..
     string.rep(" ", self.index_length) -- (Children) Amount of spaces to skip
