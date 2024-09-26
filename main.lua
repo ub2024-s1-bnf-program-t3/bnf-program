@@ -26,7 +26,7 @@ while true do
     
     local input = getInput()
     if input == "HALT" then
-        print("Exiting the program. Goodbye!")
+        print("REPL Engine (c) 2024 Immanuel Garcia, Amilcar Vasquez\nExiting the program. Goodbye!")
         break
     end
 
