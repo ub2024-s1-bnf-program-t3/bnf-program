@@ -10,7 +10,8 @@ function Charts:new(ast)
         index = 0,
         index_length = 0,
         current_single_values = "",
-        earlier_separation = ""
+        earlier_separation = "",
+        earlier_separation_pipe = ""
     }
     setmetatable(charts, Charts)
     return charts
@@ -54,7 +55,8 @@ function Charts:traverse_node(node, reference_to)
         -- local amount_of_tabs = reference_to
         -- local prefix = string.rep("  ", amount_of_tabs) -- Amount of spaces to skip
         -- prefix = spaces_inserts .. prefix .. "│"
-        local prefix = self.earlier_separation .. spaces_inserts .. "   │"
+        self.earlier_separation_pipe = self.earlier_separation_pipe .. " "
+        local prefix = self.earlier_separation .. spaces_inserts .. self.earlier_separation_pipe .. "│"
         table.insert(self.line, prefix);
     end
     -- if #node.children == 1 then
