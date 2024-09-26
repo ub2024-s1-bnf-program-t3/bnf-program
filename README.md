@@ -40,3 +40,6 @@ lua main.lua
 `scanner/structs` -> Contains the types used in helping the scanner in detecting what was inputted
 
 `main.py`         -> Ties everything together into a text-based frontend
+
+
+Repository link: https://github.com/ub2024-s1-bnf-program-t3/bnf-program
